@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        Current Location
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Latitude: <span id="lat"></span>°<br>
+                            Longitude: <span id="lon"></span>°</p>
+                        <p class="card-text">The weather is <span id="summary"></span></p>
+                        <p class="card-text">The temperature is <span id="temperature"></span>°C and a thermal sensation of <span id="apparentTemperature"></span>°C</p>
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+    <script>
+        // Ensure geolocation availability
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(async function (position) {
+                let lat, lon, weather, air_quality
+                // Reading geolocation from browser
+                lat = position.coords.latitude
+                lon = position.coords.longitude
+                // Return geolocation to user view
+                document.getElementById('lat').textContent = lat.toFixed(5)
+                document.getElementById('lon').textContent = lon.toFixed(5)
+
+                const api_url = `weather/${lat},${lon}`
+                const weatherAndAirQuality_response = await fetch(api_url)
+                const weatherAndAirQuality_data = await weatherAndAirQuality_response.json()
+
+                weather = weatherAndAirQuality_data.weather.currently
+                document.getElementById('summary').textContent = weather.summary
+                document.getElementById('temperature').textContent = weather.temperature
+                document.getElementById('apparentTemperature').textContent = weather.apparentTemperature
+
+                console.log(weatherAndAirQuality_data)
+            })
+        } else {
+            alert("I'm sorry, but geolocation services are not supported by your browser.")
+        }
+
+    </script>
+</body>
+</html>

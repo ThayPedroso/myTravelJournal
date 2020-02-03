@@ -1,0 +1,12 @@
+.navbar {
+    background-color: #563d7c;
+}
+
+nav .navbar-brand .yellow
+{
+    color: yellow;
+}
+
+.container {
+    padding-top: 20px;
+}

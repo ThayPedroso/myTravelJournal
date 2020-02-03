@@ -1,0 +1,23 @@
+{
+  "name": "mytraveljournal",
+  "version": "1.0.0",
+  "description": "particular travel journal",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "myTravelJournal"
+  },
+  "author": "Thayla Pedroso",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0"
+  }
+}

@@ -1,7 +1,9 @@
 const express = require('express')
 const fetch = require('node-fetch')
 require('dotenv').config()
+const sqlite3 = require('sqlite3').verbose()
 
+const db = new sqlite3.Database('travels')
 const app = express()
 
 port = 3333
@@ -10,6 +12,59 @@ app.use(express.static('public'))
 app.use(express.json({ limit: '1mb' }))
 
 app.listen(port, () => console.log(`Listening at ${port}`))
+
+app.get('/api', (request, response) => {
+    db.serialize(function() {
+        const checkins = db.all(`SELECT * FROM checkins`, (err, rows) => {
+            if (err) {
+                console.log(err)
+                response.end()
+                return
+            }
+
+            console.log(rows)
+            response.json(rows)
+        })
+    })
+
+    db.close()
+    // database.find({}, (err, data) => {
+    //     if (err) {
+    //         response.end()
+    //         return
+    //     }
+    //     response.json(data)
+    // })
+})
+
+app.post('/api', (request, response) => {
+    const data = request.body
+    //console.log(data)
+    // reading current date to use in database
+    const timestamp = Date.now()
+    data.timestamp = timestamp
+    // working with sqlite3
+    db.serialize(function() {
+        db.run(`CREATE TABLE IF NOT EXISTS checkins (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+            latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, summary TEXT NOT NULL, 
+            icon TEXT NOT NULL, precipIntensity NUMERIC, temperature NUMERIC NOT NULL,
+            apparentTemperature NUMERIC NOT NULL, humidity NUMERIC, windSpeed NUMERIC, parameter TEXT,
+            value NUMERIC, lastUpdated TEXT, unit TEXT, sourceName TEXT, date NUMERIC NOT NULL)`)
+
+        const checkin = db.prepare(`INSERT INTO checkins (latitude, longitude, summary, icon, precipIntensity, temperature,
+            apparentTemperature, humidity, windSpeed, parameter, value, lastUpdated, unit, sourceName,
+            date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`)
+
+        checkin.run(data.lat, data.lon, data.weather.summary, data.weather.icon, data.weather.precipIntensity,
+            data.weather.temperature, data.weather.apparentTemperature, data.weather.humidity, 
+            data.weather.windSpeed, data.air_quality.parameter, data.air_quality.value, 
+            data.air_quality.lastUpdated, data.air_quality.unit, data.air_quality.sourceName, timestamp)
+
+        checkin.finalize()
+
+        response.json(data)
+    })
+})
 
 app.get('/weather/:latlon', async (request, response) => {
     // Read latitude and longitude from request
@@ -32,7 +87,6 @@ app.get('/weather/:latlon', async (request, response) => {
         weather: darkSky_data,
         air_quality: aq_data
     }
-    console.log(data)
+    //console.log(data)
     response.json(data)
-
 })

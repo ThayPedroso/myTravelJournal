@@ -14,3 +14,5 @@ nav .navbar-brand .yellow
 .card-title {
     color:darkorchid;
 }
+
+#checkinMap { height: 500px; }

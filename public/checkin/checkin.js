@@ -31,7 +31,7 @@ if ("geolocation" in navigator) {
             document.getElementById('aq_date').textContent = air_quality.lastUpdated.toLocaleString()
             document.getElementById('sourceName').textContent = air_quality.sourceName
 
-            console.log(weatherAndAirQuality_data)
+            //console.log(weatherAndAirQuality_data)
         } catch (error) {
             console.log(error)
             air_quality = { value: -1 }
@@ -39,7 +39,17 @@ if ("geolocation" in navigator) {
             document.getElementById('aq_value').textContent = 'N/A'
             document.getElementById('aq_date').textContent = 'N/A'
         }
-        
+        const data = { lat, lon, weather, air_quality }
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }
+        const db_response = await fetch('/api', options)
+        const db_json = await db_response.json()
+        console.log(db_json)
     })
 } else {
     alert("I'm sorry, but geolocation services are not supported by your browser.")

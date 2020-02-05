@@ -1,0 +1,46 @@
+<%- contentFor('body') %>
+<img src="" id="weatherImg" class="img-fluid" alt="Responsive weather image">
+<div class="container">
+    <div class="row justify-content-end">
+        <img src="assets/my_location-24px.svg" width="20" height="20" class="d-inline-block align-top" alt="my-location">
+        <h6 class="card-text text-right">  Latitude: <span id="lat"></span>°
+            Longitude: <span id="lon"></span>°
+        </h6>
+    </div>
+    <h3 class="card-text">The weather is <span id="summary"></span></h3>
+    <div class="row">
+        <div class="col">
+            <div class="card-group">
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Temperature</h5>
+                        <h1 class="card-text"><span id="temperature"></span>°C</h1>
+                    </div>
+                </div>  
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Feels like</h5>
+                        <h1 class="card-text"><span id="apparentTemperature"></span>°C</h1>
+                    </div>
+                </div>
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h4 class="card-text">Rain: <span id="precipIntensity"></span>%</h4>
+                        <h4 class="card-text">Humidity: <span id="humidity"></span>%</h4>
+                        <h4 class="card-text">Wind: <span id="windSpeed"></span>Km/h</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card" id="airQuality">
+                <div class="card-body">
+                    <h5 class="card-title">Air Quality</h5>
+                    <h5 class="card-text"><span id="sourceName"></span></h5>
+                    <h6 class="card-text">The concentration of particulate matter (<span id="aq_parameter"></span>)
+                        is <span id="aq_value"></span> <span id="aq_units"></span> last read on <span id="aq_date"></span>
+                    </h6>
+                </div>
+            </div> 
+        </div>
+    </div>
+</div>
+<script src="checkin.js"></script>

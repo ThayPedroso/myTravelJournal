@@ -1,5 +1,5 @@
 // Making a map and tiles
-const mymap = L.map('checkinMap').setView([0, 0], 3)
+let mymap = L.map('checkinMap').setView([0, 0], 2)
 const attribution = '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
 const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 const tiles = L.tileLayer(tileUrl, { attribution })
@@ -9,9 +9,17 @@ getData()
 async function getData() {
     const response = await fetch('/api')
     const data = await response.json()
+    console.log(data)
+
+    // Making a icon with a custom icon
+    const newIcon = L.icon({
+        iconUrl: 'assets/person_pin_circle-24px.svg',
+        iconSize: [50, 32],
+        iconAnchor: [25, 16],
+    });
 
     for (item of data) {
-        const marker = L.marker([item.latitude, item.longitude]).addTo(mymap)
+        const marker = L.marker([item.latitude, item.longitude], {icon: newIcon}).addTo(mymap)
 
         let txt = `The weather here at ${item.latitude}°, ${item.longitude}° was ${item.summary} with a temperature of 
             ${item.temperature}°C.`
@@ -27,5 +35,5 @@ async function getData() {
         marker.bindPopup(txt)
     }
 
-    //console.log(data);
+    //console.log(data)
 }

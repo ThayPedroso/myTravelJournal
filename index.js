@@ -1,6 +1,8 @@
+const path = require('path')
 const express = require('express')
 const fetch = require('node-fetch')
 require('dotenv').config()
+const expressLayouts = require('express-ejs-layouts')
 const sqlite3 = require('sqlite3').verbose()
 
 const db = new sqlite3.Database('travels')
@@ -8,14 +10,40 @@ const app = express()
 
 port = 3333
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.set('layout extractScripts', true)
+app.set('layout extractStyles', true)
+app.use(expressLayouts) 
 app.use(express.static('public'))
 app.use(express.json({ limit: '1mb' }))
 
 app.listen(port, () => console.log(`Listening at ${port}`))
 
+app.get('/', (request, response) => {
+    response.render('pages/home')
+})
+
+app.get('/checkin', (request, response) => {
+    response.render('pages/checkin')
+})
+
+app.get('/places', (request, response) => {
+    response.render('pages/places')
+})
+
+app.get('/photos', (request, response) => {
+    response.render('pages/photos')
+})
+
+
+app.get('/checkin', (request, response) => {
+    response.render('home.ejs')
+})
+
 app.get('/api', (request, response) => {
     db.serialize(function() {
-        const checkins = db.all(`SELECT * FROM checkins`, (err, rows) => {
+        db.all(`SELECT * FROM checkins`, (err, rows) => {
             if (err) {
                 console.log(err)
                 response.end()
@@ -27,14 +55,7 @@ app.get('/api', (request, response) => {
         })
     })
 
-    db.close()
-    // database.find({}, (err, data) => {
-    //     if (err) {
-    //         response.end()
-    //         return
-    //     }
-    //     response.json(data)
-    // })
+    //db.close()
 })
 
 app.post('/api', (request, response) => {
@@ -64,6 +85,7 @@ app.post('/api', (request, response) => {
 
         response.json(data)
     })
+    //db.close()
 })
 
 app.get('/weather/:latlon', async (request, response) => {
@@ -90,3 +112,4 @@ app.get('/weather/:latlon', async (request, response) => {
     //console.log(data)
     response.json(data)
 })
+

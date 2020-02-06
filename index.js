@@ -4,11 +4,13 @@ const fetch = require('node-fetch')
 require('dotenv').config()
 const expressLayouts = require('express-ejs-layouts')
 const sqlite3 = require('sqlite3').verbose()
+const fs = require('fs')
 
 const db = new sqlite3.Database('travels')
 const app = express()
 
 port = 3333
+const baseURL = 'http://localhost:3333' 
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -113,3 +115,39 @@ app.get('/weather/:latlon', async (request, response) => {
     response.json(data)
 })
 
+app.post('/photo', (request, response) => {
+    const data = request.body
+    //console.log(data)
+    // reading current date to use in database
+    const timestamp = Date.now()
+    data.timestamp = timestamp
+    const imagePath = base64ToPng(data.image64, timestamp)
+    data.image64 = imagePath
+    // working with sqlite3
+    db.serialize(function() {
+        db.run(`CREATE TABLE IF NOT EXISTS photos (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
+            latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, path TEXT NOT NULL, 
+            date NUMERIC NOT NULL)`)
+
+        const photo = db.prepare(`INSERT INTO photos (latitude, longitude, path, date)
+         VALUES (?,?,?,?)`)
+
+        photo.run(data.latitude, data.longitude, imagePath, timestamp)
+
+        photo.finalize()
+
+        response.json(data)
+    })
+    //console.log(data)
+    //db.close()
+})
+
+function base64ToPng (data, imageName) {
+    data = data.replace(/^data:image\/png;base64,/, '')
+    const imagePath = path.resolve(__dirname, `./public/assets/users/${imageName}.png`)
+    fs.writeFile(imagePath, data, 'base64', function(err) {
+        if (err) console.log(err)
+    })
+    const imageURL = `${baseURL}/assets/users/${imageName}.png`
+    return imageURL
+}

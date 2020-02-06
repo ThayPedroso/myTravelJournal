@@ -9,7 +9,7 @@ getData()
 async function getData() {
     const response = await fetch('/api')
     const data = await response.json()
-    console.log(data)
+    //console.log(data)
 
     // Making a icon with a custom icon
     const newIcon = L.icon({

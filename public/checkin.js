@@ -49,7 +49,7 @@ if ("geolocation" in navigator) {
         }
         const db_response = await fetch('/api', options)
         const db_json = await db_response.json()
-        console.log(db_json)
+        //console.log(db_json)
     })
 } else {
     alert("I'm sorry, but geolocation services are not supported by your browser.")

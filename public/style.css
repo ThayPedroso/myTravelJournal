@@ -16,3 +16,12 @@ nav .navbar-brand .yellow
 }
 
 #checkinMap { height: 500px; }
+
+video {
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}

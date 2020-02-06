@@ -1,2 +1,17 @@
 <%- contentFor('body') %>
-    <p>Heloooo from photoooos!</p>
+    
+<div class="container">
+    <h2>Post a picture</h2>
+    <form>
+        <div class="form-group">
+            <label for="usermood">How are you feeling today?</label>
+            <input type="text" class="form-control" name="mood" id="usermood">
+        </div>
+        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+    </form>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/p5@0.8.0/lib/p5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@0.8.0/lib/addons/p5.dom.min.js"></script>
+<script src="sketch.js"></script>

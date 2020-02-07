@@ -1,0 +1,29 @@
+<%- contentFor('body') %>
+
+<div class="container">
+    <h2>All your saved pics</h2>
+    <div class="row row-cols-1 row-cols-md-3">
+        <% for (photo of photos){%>
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <img class="card-img-top" style="height: 250px" src="<%= photo.path %>" alt="saved images">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <div class="card-text">
+                                <h5><%= photo.mood %></h5>
+                            </div>
+                        </div>
+                        <div class="card-text">
+                            <p>Location</p>
+                            <p>lat: <%= photo.latitude %> lon: <%= photo.longitude %></p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted"><%= photo.date %></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+</div>

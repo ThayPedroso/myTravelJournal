@@ -9,7 +9,7 @@ const fs = require('fs')
 const db = new sqlite3.Database('travels')
 const app = express()
 
-port = 3333
+port = process.env.PORT || 3333
 const baseURL = 'http://localhost:3333' 
 
 app.set('views', path.join(__dirname, 'views'));
@@ -38,6 +38,26 @@ app.get('/photos', (request, response) => {
     response.render('pages/photos')
 })
 
+app.get('/gallery', (request, response) => {
+    db.serialize(function() {
+        db.all(`SELECT * FROM photos`, (err, rows) => {
+            if (err) {
+                console.log(err)
+                response.end()
+                return
+            }
+            rows.forEach((item) => {
+                item.date = new Date(item.date)
+                item.latitude = item.latitude.toFixed(6)
+                item.longitude = item.longitude.toFixed(6)
+            })
+            response.render('pages/gallery', {
+                photos: rows
+            })
+        })
+    })
+    
+})
 
 app.get('/checkin', (request, response) => {
     response.render('home.ejs')
@@ -52,7 +72,7 @@ app.get('/api', (request, response) => {
                 return
             }
 
-            console.log(rows)
+            //console.log(rows)
             response.json(rows)
         })
     })
@@ -115,7 +135,7 @@ app.get('/weather/:latlon', async (request, response) => {
     response.json(data)
 })
 
-app.post('/photo', (request, response) => {
+app.post('/photos', (request, response) => {
     const data = request.body
     //console.log(data)
     // reading current date to use in database
@@ -126,13 +146,13 @@ app.post('/photo', (request, response) => {
     // working with sqlite3
     db.serialize(function() {
         db.run(`CREATE TABLE IF NOT EXISTS photos (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, 
-            latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, path TEXT NOT NULL, 
+            latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, path TEXT NOT NULL, mood TEXT, 
             date NUMERIC NOT NULL)`)
 
-        const photo = db.prepare(`INSERT INTO photos (latitude, longitude, path, date)
-         VALUES (?,?,?,?)`)
+        const photo = db.prepare(`INSERT INTO photos (latitude, longitude, path, mood, date)
+         VALUES (?,?,?,?,?)`)
 
-        photo.run(data.latitude, data.longitude, imagePath, timestamp)
+        photo.run(data.latitude, data.longitude, imagePath, data.mood, timestamp)
 
         photo.finalize()
 

@@ -102,5 +102,24 @@ dist
 
 # TernJS port file
 .tern-port
+
+# Database
 travels
 travels.db
+
+# Tested photos
+public/assets/users/1581080163877.png
+public/assets/users/1581080294567.png
+public/assets/users/1581086708965.png
+public/assets/users/1581114539786.png
+public/assets/users/1581114671824.png
+public/assets/users/1581114756122.png
+public/assets/users/1581114772302.png
+public/assets/users/1581114780164.png
+public/assets/users/1581114811970.png
+public/assets/users/1581114815151.png
+public/assets/users/1581114817205.png
+public/assets/users/1581117615556.png
+public/assets/users/1581117709990.png
+public/assets/users/1581117833543.png
+public/assets/users/1581117845459.png

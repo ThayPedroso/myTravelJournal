@@ -21,9 +21,9 @@ function setup() {
                     },
                     body: JSON.stringify(data)
                 }
-                const response = await fetch('/photo', options)
+                const response = await fetch('/photos', options)
                 const responseData = await response.json()
-                console.log(responseData)
+                //console.log(responseData)
             })
         } else {
             alert("I'm sorry, but geolocation services are not supported by your browser.")

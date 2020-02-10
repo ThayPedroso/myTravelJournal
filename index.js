@@ -171,3 +171,4 @@ function base64ToPng (data, imageName) {
     const imageURL = `${baseURL}/assets/users/${imageName}.png`
     return imageURL
 }
+

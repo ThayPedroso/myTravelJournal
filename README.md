@@ -54,3 +54,6 @@ CREATE TABLE IF NOT EXISTS photos (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
             latitude NUMERIC NOT NULL, longitude NUMERIC NOT NULL, path TEXT NOT NULL, mood TEXT, 
             date NUMERIC NOT NULL)
 ```
+### YouTube 
+
+You can see this project running at: https://www.youtube.com/watch?v=qMOT43YAEUs&t=1s
